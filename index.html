@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的故事 💕</title>
+        <audio id="bgMusic" loop preload="auto">
+            <source src="一生的爱-林俊杰.mp3" type="audio/mpeg">
+        </audio>
+        <style>
+    <style>
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: pointer;
+        }
+        
+        .welcome-overlay h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .welcome-overlay p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-overlay .enter-btn {
+            background: white;
+            color: #764ba2;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .welcome-overlay .enter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .welcome-overlay .hearts {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+        
+        .header .hearts {
+            font-size: 1.5em;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .counter {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        
+        .counter h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .counter .days {
+            font-size: 3em;
+            color: #f093fb;
+            font-weight: bold;
+        }
+        
+        .counter .label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .current-time {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #e0e0e0;
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+        
+        .current-time .time {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #f093fb;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #fff, #f093fb, #667eea);
+            border-radius: 2px;
+        }
+        
+        .event {
+            position: relative;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .event:hover {
+            transform: translateX(10px);
+        }
+        
+        .event::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid #f093fb;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(240,147,251,0.3);
+        }
+        
+        .event .date {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+        
+        .event h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+        
+        .event p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .event .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1000;
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .music-btn.playing {
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .message-box {
+            background: rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .message-box .message {
+            color: white;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        
+        .message-box .message:first-child {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        
+        .journey-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 25px;
+            font-size: 1.4em;
+        }
+        
+        .journey-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .journey-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+            border-radius: 16px;
+            padding: 25px;
+        }
+        
+        .journey-card h3 {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f093fb;
+        }
+        
+        .journey-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .journey-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .journey-item .year {
+            color: #f093fb;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .journey-item .place {
+            color: #333;
+            font-size: 1em;
+        }
+        
+        .journey-item.highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .journey-item.highlight .year,
+        .journey-item.highlight .place {
+            color: white;
+        }
+        
+        .journey-divider {
+            display: flex;
+            align-items: center;
+            font-size: 2em;
+            padding: 0 10px;
+        }
+        
+        .meeting-text {
+            text-align: center;
+            color: #764ba2;
+            margin-top: 25px;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+        
+        .photo-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .photo-gallery {
+            display: flex;
+            gap: 20px;
+            animation: scroll 30s linear infinite;
+            width: max-content;
+        }
+        
+        .photo-gallery:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        .photo-item {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 1;
+            border: 4px solid rgba(255, 182, 193, 0.8);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.3), 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .photo-item::before {
+            content: '💗';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 3em;
+            z-index: 10;
+            opacity: 0;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+        
+        .photo-item:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        
+        .photo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-item::after {
+            content: '💕';
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 1.2em;
+            opacity: 0.8;
+            transition: all 0.3s;
+            text-shadow: 0 0 5px rgba(255,255,255,0.8);
+        }
+        
+        .photo-item:hover::after {
+            opacity: 1;
+            transform: scale(1.3);
+        }
+        
+        /* 飘落的心形 */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            top: -50px;
+            animation: fall linear forwards;
+            font-size: 20px;
+            opacity: 0.7;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* 大图预览 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .footer .heart {
+            color: #ff6b9d;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .counter .days {
+                font-size: 2.5em;
+            }
+            .event {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    <div class="welcome-overlay" id="welcomeOverlay" onclick="enterPage()">
+        <div class="hearts">💕 💑 💕</div>
+        <h1>我们的故事</h1>
+        <p>进进 & 菲菲</p>
+        <button class="enter-btn">点击进入 ✨</button>
+    </div>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+    <div class="container">
+        <div class="header">
+            <div class="hearts">💕 💑 💕</div>
+            <h1>我们的故事</h1>
+        </div>
+        
+        <div class="counter">
+            <h2>💌 我们已经在一起</h2>
+            <div class="days" id="daysCount">计算中...</div>
+            <div class="label">天啦</div>
+            <div class="current-time" id="currentTime"></div>
+        </div>
+        
+        <div class="journey-section">
+            <h2 class="section-title">🗺️ 相遇之前，我们各自走过的地方</h2>
+            <div class="journey-container">
+                <div class="journey-card">
+                    <h3><img src="dog-avatar-2.jpg" class="avatar" alt="进进"> 进进</h3>
+                    <div class="journey-item">
+                        <span class="year">1997</span>
+                        <span class="place">📍 出生于九江</span>
+                    </div>
+                    <div class="journey-item">
+                        <span class="year">2014-2021</span>
+                        <span class="place">🎓 南京大学 · 南京</span>
+                    </div>
+                    <div class="journey-item highlight">
+                        <span class="year">2021-2026</span>
+                        <span class="place">🏙️ 深圳</span>
+                    </div>
+                </div>
+                <div class="journey-divider">
+                    <span>💕</span>
+                </div>
+                <div class="journey-card">
+                    <h3><img src="dog-avatar.jpg" class="avatar" alt="菲菲"> 菲菲</h3>
+                    <div class="journey-item">
+                        <span class="year">1998</span>
+                        <span class="place">📍 出生于襄阳</span>
+                    </div>
+                    <div class="journey-item">
+                        <span class="year">2017-2021</span>
+                        <span class="place">🎓 中南财经政法大学 · 武汉</span>
+                    </div>
+                    <div class="journey-item highlight">
+                        <span class="year">2022-2026</span>
+                        <span class="place">🏙️ 深圳</span>
+                    </div>
+                </div>
+            </div>
+            <p class="meeting-text">🌟 2025年，我们在深圳相遇，故事由此开始...</p>
+        </div>
+        
+        <h2 class="section-title">📷 我们的甜蜜瞬间</h2>
+        <div class="photo-section">
+            <div class="photo-gallery">
+                <div class="photo-item" onclick="openLightbox('photo1.jpg')"><img src="photo1.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo2.jpg')"><img src="photo2.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo3.jpg')"><img src="photo3.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo4.jpg')"><img src="photo4.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo5.jpg')"><img src="photo5.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo6.jpg')"><img src="photo6.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo7.jpg')"><img src="photo7.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo8.jpg')"><img src="photo8.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo9.jpg')"><img src="photo9.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo10.jpg')"><img src="photo10.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo11.jpg')"><img src="photo11.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo12.jpg')"><img src="photo12.jpg" alt="我们的照片"></div>
+                <!-- 复制一份实现无缝滚动 -->
+                <div class="photo-item" onclick="openLightbox('photo1.jpg')"><img src="photo1.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo2.jpg')"><img src="photo2.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo3.jpg')"><img src="photo3.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo4.jpg')"><img src="photo4.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo5.jpg')"><img src="photo5.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo6.jpg')"><img src="photo6.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo7.jpg')"><img src="photo7.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo8.jpg')"><img src="photo8.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo9.jpg')"><img src="photo9.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo10.jpg')"><img src="photo10.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo11.jpg')"><img src="photo11.jpg" alt="我们的照片"></div>
+                <div class="photo-item" onclick="openLightbox('photo12.jpg')"><img src="photo12.jpg" alt="我们的照片"></div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">💕 我们的恋爱时光</h2>
+        <div class="timeline">
+            <div class="event">
+                <div class="emoji">💬</div>
+                <span class="date">2025.02.02</span>
+                <h3>第一次线上聊天</h3>
+                <p>故事的开始，从一句"你好"开始了一段美丽的缘分 ✨</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">🎂</div>
+                <span class="date">2025.03.03</span>
+                <h3>第一次见面 · 给菲菲过生日</h3>
+                <p>从线上走到线下，第一次相见，是为了陪你度过特别的一天 💝</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">💑</div>
+                <span class="date">2025.03.29</span>
+                <h3>确认关系</h3>
+                <p>从相识到相知，终于等到这一天，我们正式在一起了 💕</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">🏖️</div>
+                <span class="date">2025.06.01 - 2025.06.02</span>
+                <h3>大鹏半岛 · 桔钓沙、杨梅坑之旅</h3>
+                <p>儿童节的浪漫旅行，海边的日落，留下了我们最美的回忆 🌅</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">🏠</div>
+                <span class="date">2025.10.03</span>
+                <h3>第一次来我家见家长</h3>
+                <p>把你带回家，是最郑重的介绍，也是对未来最美好的期待 👨‍👩‍👧</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">🎊</div>
+                <span class="date">2026年正月初四</span>
+                <h3>第一次去菲菲家</h3>
+                <p>新年的喜庆，第一次上门拜访，感谢这份接纳与温暖 🧧</p>
+            </div>
+            
+            <div class="event">
+                <div class="emoji">🎉</div>
+                <span class="date">2026.03.29</span>
+                <h3>一周年纪念日</h3>
+                <p>365天的陪伴，365天的甜蜜，我们走过了一整年！未来的每一个周年，我都想和你一起度过 💕</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="message-box">
+                <p class="message">亲爱的菲菲，</p>
+                <p class="message">遇见你，是我这辈子最幸运的事。</p>
+                <p class="message">从2025年2月2日第一次聊天开始，我的世界就有了不一样的颜色。从线上到线下，从陌生到熟悉，从第一次见面到确认关系，每一步都让我更加确定——是你，只能是你。</p>
+                <p class="message">执子之手，与子偕老。这不是一句空话，而是我想用一生去兑现的承诺。</p>
+                <p class="message">谢谢你愿意走进我的生活，谢谢你让我成为那个可以陪在你身边的人。</p>
+                <p class="message">未来的路还很长，我想和你一起，慢慢走。</p>
+            </div>
+            <p style="margin-top: 30px;">故事还在继续... <span class="heart">❤</span></p>
+        </div>
+    </div>
+    
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="大图预览">
+    </div>
+    
+    <script>
+        // 计算在一起的天数（从确认关系开始算）
+        const startDate = new Date('2025-03-29');
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById('daysCount').textContent = diffDays;
+        
+        // 实时时钟
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
+            
+            document.getElementById('currentTime').innerHTML = 
+                `📅 ${year}年${month}月${day}日 ${weekday} <span class="time">🕐 ${hours}:${minutes}:${seconds}</span>`;
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // 音乐控制
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+        
+        // 点击进入页面并播放音乐
+        function enterPage() {
+            document.getElementById('welcomeOverlay').style.display = 'none';
+            music.play().then(() => {
+                isPlaying = true;
+                musicBtn.textContent = '🎶';
+                musicBtn.classList.add('playing');
+            }).catch(() => {
+                isPlaying = false;
+                musicBtn.textContent = '🎵';
+            });
+            // 开始飘落心形
+            startHearts();
+        }
+        
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.textContent = '🎵';
+                musicBtn.classList.remove('playing');
+            } else {
+                music.play();
+                musicBtn.textContent = '🎶';
+                musicBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+        
+        // 照片墙大图预览
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+        
+        // 飘落的心形
+        function createHeart() {
+            const hearts = ['💕', '💗', '💖', '💝', '❤', '💓', '💞'];
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+        
+        // 进入页面后开始飘落心形
+        function startHearts() {
+            setInterval(createHeart, 800);
+        }
+    </script>
+</body>
+</html>
